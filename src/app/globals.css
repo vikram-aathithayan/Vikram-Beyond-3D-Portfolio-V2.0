@@ -1,0 +1,209 @@
+@import "tailwindcss";
+
+/*
+  Palette: black and royal gold.
+  night   – pure black, the page itself
+  deep    – raised panels, a step out of the dark
+  paper   – text, warm white
+  lamp    – royal gold, the one accent for actions and highlights
+  ember   – champagne, the light end of the gold gradient
+  Chart hues (validated for CVD + contrast on --color-deep): gold, steel blue.
+*/
+@theme {
+  --color-night: #050505;
+  --color-deep: #0f0f10;
+  --color-deeper: #000000;
+  --color-line: #24221e;
+  --color-paper: #f6f3ec;
+  --color-muted: #b0aa9e;
+  --color-faint: #7a7468;
+  --color-lamp: #f5c451;
+  --color-lamp-ink: #1a1302;
+  --color-ember: #ffe7a3;
+  --color-good: #4ade80;
+
+  --color-chart-1: #b88a1a;
+  --color-chart-2: #4a8fd6;
+  --color-chart-3: #4a8fd6;
+
+  --font-display: var(--nf-display), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--nf-body), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--nf-code), ui-monospace, monospace;
+}
+
+html {
+  background: var(--color-night);
+  color-scheme: dark;
+  /* Filters and reveals change heights; keep the page from jumping when they do. */
+  overflow-anchor: none;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+body {
+  background: var(--color-night);
+  color: var(--color-paper);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-lamp);
+  color: var(--color-lamp-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-lamp);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Display type: Bricolage at a wide, tight setting is the voice of the page. */
+.display {
+  font-family: var(--font-display);
+  font-variation-settings: "wdth" 100, "opsz" 96;
+  letter-spacing: -0.035em;
+  line-height: 0.92;
+  font-weight: 700;
+}
+.display-condensed {
+  font-variation-settings: "wdth" 75, "opsz" 96;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-variation-settings: "wdth" 88, "opsz" 72;
+  font-weight: 650;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  font-size: clamp(2.25rem, 5.5vw, 4.25rem);
+}
+
+.measure {
+  max-width: 62ch;
+}
+
+/* The hero stage: black, with a soft gold light pooling behind the name. */
+.stage {
+  background:
+    radial-gradient(42% 38% at 50% 58%, rgb(245 196 81 / 0.13), transparent 70%),
+    radial-gradient(55% 45% at 62% 70%, rgb(184 138 26 / 0.12), transparent 70%);
+}
+
+/* Light sweeping across each letter of the giant name, one after another. */
+@keyframes shine {
+  0%,
+  55% {
+    background-position: 160% 0, 0 0;
+  }
+  100% {
+    background-position: -60% 0, 0 0;
+  }
+}
+.fire-letter {
+  background:
+    linear-gradient(100deg, transparent 35%, rgb(255 255 255 / 0.7) 50%, transparent 65%) no-repeat,
+    linear-gradient(180deg, #fff4d1 0%, #ffd76e 35%, #f5c451 62%, #b07a1c 100%);
+  background-size: 250% 100%, 100% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 28px rgb(245 196 81 / 0.22));
+  animation: shine 4.5s ease-in-out infinite;
+}
+/* First name in bright white-to-silver, so the two halves of the name read as a pair. */
+.fire-letter.silver {
+  background:
+    linear-gradient(100deg, transparent 35%, rgb(255 236 180 / 0.65) 50%, transparent 65%) no-repeat,
+    linear-gradient(180deg, #ffffff 0%, #f4f2ee 40%, #c9c6bf 78%, #8f8b84 100%);
+  background-size: 250% 100%, 100% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 26px rgb(255 255 255 / 0.14));
+}
+
+/* Scroll reveal: only hides content once JS has marked the page, so it never stays invisible. */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 40px, 0);
+  filter: blur(6px);
+  transition:
+    opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms),
+    transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms),
+    filter 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms);
+}
+.js [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* The tech band under the hero. */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee {
+  animation: marquee 38s linear infinite;
+}
+.marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Light particles rising behind the figure. */
+@keyframes ember {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0;
+  }
+  15% {
+    opacity: var(--o, 0.8);
+  }
+  100% {
+    transform: translate3d(var(--dx, 20px), -70vh, 0) scale(0.4);
+    opacity: 0;
+  }
+}
+.ember {
+  position: absolute;
+  bottom: 8%;
+  border-radius: 9999px;
+  background: radial-gradient(circle, #fff1c9 0%, #f5c451 55%, transparent 70%);
+  animation: ember linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  html,
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+}
+
+
